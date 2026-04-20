@@ -1,0 +1,914 @@
+\documentclass[a4paper,12pt,oneside]{report}
+
+% ================= ENCODAGE ET LANGUE =================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% ================= PACKAGES =================
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage{tocloft}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{lmodern}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{verbatim}
+\usepackage{placeins}
+
+% ================= MARGES =================
+\geometry{
+  top=2.5cm,
+  bottom=2.5cm,
+  left=2.5cm,
+  right=2.5cm
+}
+
+% ================= COULEURS =================
+\definecolor{mainorange}{RGB}{230,126,34}
+\definecolor{darkblue}{RGB}{30,45,80}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{softgray}{RGB}{120,120,120}
+
+% ================= HYPERREF =================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=mainorange,
+    filecolor=mainorange,
+    urlcolor=mainorange,
+    citecolor=mainorange,
+    pdftitle={Projet module S3 - Gestion des soutenances},
+    pdfauthor={Étudiants ISME},
+    pdfsubject={Application web de gestion des soutenances},
+    pdfkeywords={ISME, soutenance, projet, module S3, application web}
+}
+
+% ================= INTERLIGNE =================
+\onehalfspacing
+
+% ================= STYLE DES TITRES =================
+\titleformat{\chapter}[display]
+{\normalfont\bfseries\color{darkblue}}
+{\filleft\Huge\chaptertitlename\ \thechapter}
+{1ex}
+{\titlerule\vspace{1ex}\huge}
+[\vspace{1ex}\titlerule]
+
+\titleformat{\section}
+{\Large\bfseries\color{mainorange}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{darkblue}}
+{\thesubsection}{1em}{}
+
+% ================= TABLE DES MATIERES =================
+\renewcommand{\contentsname}{Table des matières}
+\renewcommand{\listfigurename}{Liste des figures}
+\renewcommand{\listtablename}{Liste des tableaux}
+
+\renewcommand{\cfttoctitlefont}{\Huge\bfseries\color{black}}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftchapfont}{\bfseries\color{black}}
+\renewcommand{\cftsecfont}{\color{black}}
+\renewcommand{\cftsubsecfont}{\color{black}}
+\renewcommand{\cftchappagefont}{\bfseries\color{black}}
+\renewcommand{\cftsecpagefont}{\color{black}}
+\renewcommand{\cftsubsecpagefont}{\color{black}}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
+
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{18pt}
+\setlength{\cftbeforechapskip}{8pt}
+\setlength{\cftbeforesecskip}{2pt}
+\setlength{\cftchapindent}{0pt}
+\setlength{\cftsecindent}{1.5em}
+\setlength{\cftsubsecindent}{3.8em}
+\setlength{\cftchapnumwidth}{2.5em}
+\setlength{\cftsecnumwidth}{3.2em}
+\setlength{\cftsubsecnumwidth}{4em}
+
+% ================= HEADER / FOOTER =================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{darkblue}{Application web de gestion des soutenances}}
+\fancyhead[R]{\textcolor{mainorange}{Projet module S3}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+
+% ================= COMMANDES =================
+\newcommand{\HRule}{\rule{\linewidth}{0.7mm}}
+
+% ================= PARAMETRES FLOATS =================
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.9}
+\setcounter{topnumber}{5}
+\setcounter{bottomnumber}{5}
+\setcounter{totalnumber}{10}
+
+% Macro image sécurisée : largeur max 0.85\textwidth, hauteur max 0.75\textheight
+\newcommand{\safeimage}[3]{%
+\begin{figure}[htbp]
+\centering
+\IfFileExists{#1}{%
+    \includegraphics[width=#2,height=0.75\textheight,keepaspectratio]{#1}%
+}{%
+    \fbox{%
+        \begin{minipage}[c][4cm][c]{0.8\textwidth}
+        \centering
+        \textbf{Capture non ajoutée pour le moment}\\[0.3cm]
+        Nom du fichier : \nolinkurl{#1}
+        \end{minipage}
+    }%
+}
+\caption{#3}
+\end{figure}
+}
+
+% Macro image étudiant : contrainte stricte hauteur
+\newcommand{\studentimage}[2]{%
+\begin{figure}[htbp]
+\centering
+\IfFileExists{#1}{%
+    \includegraphics[width=0.92\textwidth,height=0.72\textheight,keepaspectratio]{#1}%
+}{%
+    \fbox{%
+        \begin{minipage}[c][4cm][c]{0.8\textwidth}
+        \centering
+        \textbf{Capture non ajoutée pour le moment}\\[0.3cm]
+        Nom du fichier : \nolinkurl{#1}
+        \end{minipage}
+    }%
+}
+\caption{#2}
+\end{figure}
+}
+
+\begin{document}
+
+% =========================================================
+% PAGE DE GARDE
+% =========================================================
+\begin{titlepage}
+\begin{center}
+
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=3cm]{logo_esp.jpg}
+\end{minipage}
+\hfill
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=3cm]{logo_isme.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+{\large \textbf{République Islamique de Mauritanie}}\\[0.2cm]
+{\normalsize Honneur -- Fraternité -- Justice}\\[0.3cm]
+{\large \textbf{Groupe Polytechnique}}\\
+{\large \textbf{Institut Supérieur des Métiers de l'Énergie (ISME)}}\\[0.3cm]
+
+\vspace{1.2cm}
+
+{\Large \textbf{Rapport de Projet}}\\[0.2cm]
+{\large \textbf{Module S3}}\\[0.8cm]
+
+\HRule\\[0.4cm]
+{\Huge \bfseries \textcolor{darkblue}{Conception et réalisation d'une application web de gestion des soutenances}}\\[0.25cm]
+{\large \textcolor{mainorange}{Cas de l'Institut Supérieur des Métiers de l'Énergie (ISME)}}\\[0.4cm]
+\HRule
+
+\vspace{0.5cm}
+
+\begin{tcolorbox}[colback=lightgray,colframe=mainorange,width=0.92\textwidth,arc=3mm]
+\centering
+\textbf{\large Réalisé par :}\\[0.3cm]
+Nom complet 1\\
+Nom complet 2\\
+Nom complet 3\\
+Nom complet 4
+\end{tcolorbox}
+
+\vspace{0.8cm}
+
+\textbf{Encadré par :}\\
+Dr. Ahmed Sejad
+
+\vfill
+
+{\large \textbf{Année universitaire : 2025 -- 2026}}
+
+\end{center}
+\end{titlepage}
+
+% =========================================================
+% REMERCIEMENTS
+% =========================================================
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Nous remercions vivement notre encadrant Dr. Ahmed Sejad pour son accompagnement, ses conseils et son soutien tout au long de la réalisation de ce projet.
+
+Nous remercions également l'administration de l'ISME, les enseignants et toutes les personnes ayant contribué à l'amélioration de notre travail.
+
+\clearpage
+
+% =========================================================
+% RESUME
+% =========================================================
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+
+Dans le cadre de la transformation numérique des établissements académiques, la gestion des soutenances représente un besoin important nécessitant une bonne organisation, une centralisation des données et une communication efficace entre les différents acteurs. À l'ISME, plusieurs opérations liées aux soutenances peuvent devenir difficiles lorsqu'elles sont gérées manuellement : création des utilisateurs, gestion des filières et des classes, dépôt des mémoires, planification des soutenances, affectation des jurys, évaluation et diffusion des résultats.
+
+Pour répondre à ce besoin, nous avons conçu et réalisé une application web de gestion des soutenances. L'application repose sur deux espaces principaux : un espace \textbf{Administration / Enseignant} et un espace \textbf{Étudiant}. L'espace Administration / Enseignant permet de gérer les utilisateurs, les filières, les classes, les étudiants, les enseignants, les jurys, les soutenances, les mémoires et les évaluations. L'espace Étudiant permet de consulter les informations personnelles, le mémoire de groupe, la soutenance planifiée et les évaluations obtenues.
+
+Notre solution intègre également une logique fonctionnelle importante. Lors de la création d'un utilisateur, le système envoie un lien par email afin qu'il puisse définir son mot de passe de manière sécurisée. L'administrateur peut aussi envoyer des rappels collectifs aux étudiants concernant la date limite de dépôt des mémoires. Chaque groupe peut soumettre son mémoire avant la date limite définie. Si le délai est dépassé, la soumission est automatiquement bloquée. Après un dépôt réussi, le système envoie un email de confirmation. Des notifications par email peuvent aussi être envoyées lorsqu'une soutenance est planifiée ou lorsqu'un résultat d'évaluation est disponible.
+
+Cette application permet ainsi d'améliorer l'organisation académique, de réduire les erreurs humaines, d'automatiser plusieurs tâches administratives et de faciliter l'accès à l'information pour tous les utilisateurs.
+
+\vspace{0.5cm}
+\noindent\textbf{Mots-clés :} soutenance, mémoire, jury, évaluation, email, notification, application web, ISME.
+
+\clearpage
+
+% =========================================================
+% SOMMAIRE
+% =========================================================
+\pagestyle{plain}
+{\hypersetup{linkcolor=black}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+}
+\pagestyle{fancy}
+\hypersetup{linkcolor=mainorange}
+
+% =========================================================
+% INTRODUCTION GENERALE
+% =========================================================
+\chapter*{Introduction Générale}
+\addcontentsline{toc}{chapter}{Introduction Générale}
+
+La soutenance constitue une étape essentielle dans le parcours académique des étudiants. Elle nécessite la coordination entre plusieurs acteurs, notamment l'administration, les enseignants, les jurys et les étudiants. Dans plusieurs établissements, la gestion de ces opérations reste encore manuelle ou partiellement informatisée, ce qui peut causer une perte de temps, des erreurs d'organisation et un manque de visibilité sur les informations importantes.
+
+Dans ce contexte, notre projet consiste à concevoir et réaliser une application web de gestion des soutenances pour l'ISME. Cette application vise à centraliser les données académiques, améliorer le suivi des mémoires, faciliter la planification des soutenances, automatiser certaines notifications et offrir à chaque utilisateur un espace adapté à son rôle.
+
+Le présent rapport décrit l'étude du besoin, la conception du système, la réalisation technique de l'application, la logique métier mise en place et les principales interfaces obtenues.
+
+% =========================================================
+% CHAPITRE 1
+% =========================================================
+\chapter[Étude préalable et analyse des besoins]{Étude préalable et analyse\\ des besoins}
+
+\section{Contexte du projet}
+
+La gestion des soutenances à l'ISME implique plusieurs éléments : filières, classes, groupes, étudiants, enseignants, jurys, mémoires, soutenances et évaluations. Lorsque ces informations sont dispersées, l'organisation devient plus difficile, surtout lorsqu'il faut gérer les rappels, les dépôts de mémoire, les dates limites et les résultats.
+
+Notre projet vise à répondre à ce besoin à travers une application web centralisée et accessible.
+
+\section{Problématique}
+
+La problématique principale de ce projet est la suivante :
+
+\begin{quote}
+Comment concevoir une application web capable de centraliser et automatiser la gestion des soutenances à l'ISME, tout en facilitant le suivi des mémoires, la communication avec les étudiants et la gestion des évaluations ?
+\end{quote}
+
+\section{Objectif général}
+
+L'objectif général est de développer une application web permettant de gérer efficacement les soutenances, les mémoires et les évaluations au sein de l'ISME.
+
+\section{Objectifs spécifiques}
+
+\begin{itemize}
+    \item gérer les utilisateurs selon les rôles : administrateur, enseignant et étudiant ;
+    \item gérer les filières et les classes ;
+    \item gérer les étudiants, les enseignants et les jurys ;
+    \item planifier les soutenances ;
+    \item permettre aux groupes de soumettre leurs mémoires ;
+    \item fixer une date limite de dépôt des mémoires ;
+    \item empêcher la soumission après expiration du délai ;
+    \item envoyer des emails de rappel pour le dépôt des mémoires ;
+    \item envoyer un email automatique de confirmation après soumission ;
+    \item envoyer un lien de définition de mot de passe lors de la création du compte ;
+    \item saisir les évaluations et publier les résultats.
+\end{itemize}
+
+\section{Acteurs du système}
+
+\subsection{Administrateur}
+
+L'administrateur est responsable de la gestion globale du système. Il peut :
+\begin{itemize}
+    \item créer les comptes utilisateurs ;
+    \item envoyer un lien de définition de mot de passe ;
+    \item gérer les filières, classes, étudiants, enseignants et jurys ;
+    \item planifier les soutenances ;
+    \item envoyer des rappels collectifs aux étudiants ;
+    \item consulter les mémoires soumis.
+\end{itemize}
+
+\subsection{Enseignant}
+
+L'enseignant peut :
+\begin{itemize}
+    \item consulter les soutenances ;
+    \item consulter les mémoires ;
+    \item participer à l'évaluation ;
+    \item saisir les notes de soutenance.
+\end{itemize}
+
+\subsection{Étudiant}
+
+L'étudiant peut :
+\begin{itemize}
+    \item consulter son tableau de bord ;
+    \item consulter son mémoire ;
+    \item soumettre le mémoire de son groupe ;
+    \item consulter sa soutenance ;
+    \item consulter ses évaluations ;
+    \item recevoir des notifications et emails automatiques.
+\end{itemize}
+
+\section{Contraintes}
+
+\begin{itemize}
+    \item un mémoire est soumis par un groupe ;
+    \item un groupe peut contenir plusieurs étudiants ;
+    \item la soumission du mémoire n'est autorisée qu'avant la date limite ;
+    \item les notifications dépendent du contexte : création de compte, rappel, confirmation, planification, résultat ;
+    \item l'accès dépend du rôle de l'utilisateur.
+\end{itemize}
+
+% =========================================================
+% CHAPITRE 2
+% =========================================================
+\chapter{Conception du système}
+
+\section{Entités principales}
+
+Les principales entités du système sont :
+\begin{itemize}
+    \item Utilisateur
+    \item Filière
+    \item Classe
+    \item Groupe
+    \item Étudiant
+    \item Enseignant
+    \item Jury
+    \item Mémoire
+    \item Soutenance
+    \item Évaluation
+    \item Notification email
+\end{itemize}
+
+\section{Logique fonctionnelle générale}
+
+Le fonctionnement de l'application repose sur plusieurs règles métier importantes :
+
+\subsection{Création des comptes}
+
+Lorsqu'un administrateur crée un utilisateur, le système enregistre son compte puis envoie automatiquement un email contenant un lien sécurisé de définition du mot de passe. Grâce à ce lien, l'utilisateur peut choisir son mot de passe avant sa première connexion.
+
+\subsection{Gestion de la date limite de dépôt}
+
+L'administrateur définit une date limite de soumission des mémoires. Cette date est visible dans l'application, notamment sur la page de rappel mémoire. Tant que la date limite n'est pas dépassée, les groupes peuvent déposer leur mémoire. Dès que le délai expire, le système bloque automatiquement toute nouvelle soumission.
+
+\subsection{Soumission de mémoire par groupe}
+
+Chaque groupe peut déposer un seul mémoire via l'espace étudiant. Après la soumission réussie, le système :
+\begin{itemize}
+    \item enregistre le mémoire ;
+    \item associe le fichier au groupe ;
+    \item affiche le mémoire dans la liste des mémoires ;
+    \item envoie un email automatique de confirmation.
+\end{itemize}
+
+\subsection{Rappel collectif par email}
+
+L'administrateur peut envoyer un rappel global à tous les étudiants concernés afin de leur rappeler la date limite de dépôt du mémoire. Cette fonctionnalité améliore la communication et réduit les oublis.
+
+\subsection{Notification de planification}
+
+Quand une soutenance est planifiée, les étudiants concernés peuvent recevoir une notification ou un email contenant les informations essentielles : date, heure, salle et jury.
+
+\subsection{Notification des résultats}
+
+Après la fin de la soutenance et la saisie des évaluations, les étudiants peuvent consulter leurs notes dans leur espace personnel. Une notification ou un email peut également être envoyé pour signaler que le résultat est disponible.
+
+\section{Architecture générale}
+
+L'application suit une architecture simple en trois couches :
+\begin{enumerate}
+    \item couche présentation ;
+    \item couche logique métier ;
+    \item couche données.
+\end{enumerate}
+
+% =========================================================
+% CHAPITRE 3
+% =========================================================
+\chapter{Réalisation de l'application}
+
+\section{Technologies utilisées}
+
+\begin{itemize}
+    \item \textbf{Flask} pour le développement backend ;
+    \item \textbf{MySQL} pour la base de données ;
+    \item \textbf{HTML, CSS, JavaScript} pour les interfaces ;
+    \item \textbf{Jinja2} pour les templates dynamiques ;
+    \item \textbf{Git et GitHub} pour la gestion de versions ;
+    \item \textbf{VS Code} comme environnement de développement.
+\end{itemize}
+
+\section{Espaces de l'application}
+
+\subsection{Espace Administration / Enseignant}
+
+L'espace Administration / Enseignant contient plusieurs pages fonctionnelles :
+
+\begin{itemize}
+    \item \textbf{Dashboard} : statistiques globales et prochaines soutenances ;
+    \item \textbf{Rappel mémoire} : affichage de la deadline de soumission et envoi de rappels par email ;
+    \item \textbf{Gestion des utilisateurs} : création des comptes administrateur, enseignant et étudiant ;
+    \item \textbf{Filières} : ajout, modification, suppression et affichage des filières ;
+    \item \textbf{Classes} : gestion des classes et groupes liés aux filières ;
+    \item \textbf{Étudiants} : opérations CRUD sur les étudiants ;
+    \item \textbf{Enseignants} : gestion des enseignants ;
+    \item \textbf{Jurys} : gestion des jurys ;
+    \item \textbf{Mémoires} : consultation des mémoires soumis ;
+    \item \textbf{Soutenances} : planification, modification et consultation des soutenances ;
+    \item \textbf{Évaluations} : saisie des notes de groupe et individuelles.
+\end{itemize}
+
+\subsection{Espace Étudiant}
+
+L'espace étudiant contient plusieurs pages :
+
+\begin{itemize}
+    \item \textbf{Dashboard étudiant} : affichage de la classe, filière, dernière note, mémoire, soutenance et dernière évaluation ;
+    \item \textbf{Mon mémoire} : dépôt du mémoire, affichage de la deadline, blocage après expiration du délai, liste des mémoires ;
+    \item \textbf{Ma soutenance} : informations sur la soutenance planifiée ;
+    \item \textbf{Mes évaluations} : consultation des notes et remarques ;
+    \item \textbf{Déconnexion}.
+\end{itemize}
+
+\section{Apport des fonctionnalités avancées}
+
+Notre application ne se limite pas à un simple système CRUD. Elle intègre une logique métier utile et proche des besoins réels :
+
+\begin{itemize}
+    \item création de compte avec lien de définition du mot de passe ;
+    \item rappel collectif de dépôt de mémoire ;
+    \item dépôt de mémoire par groupe ;
+    \item contrôle automatique de la date limite ;
+    \item email de confirmation après soumission ;
+    \item notification de planification de soutenance ;
+    \item notification de publication des résultats.
+\end{itemize}
+
+Ces fonctionnalités renforcent l'aspect pratique, automatisé et académique du projet.
+
+% =========================================================
+% CHAPITRE 4
+% =========================================================
+\chapter{Évaluation et calcul des notes}
+
+\section{Évaluation de groupe}
+
+La note de groupe est calculée à partir de :
+\begin{itemize}
+    \item la note du rapport ;
+    \item la note de présentation ;
+    \item la note de l'application.
+\end{itemize}
+
+\begin{equation}
+\text{NoteGroupe} = \frac{\text{NoteRapport} + \text{NotePrésentation} + \text{NoteApplication}}{3}
+\end{equation}
+
+\section{Évaluation individuelle}
+
+L'évaluation individuelle prend en compte :
+\begin{itemize}
+    \item la participation ;
+    \item les réponses aux questions.
+\end{itemize}
+
+\begin{equation}
+\text{MoyenneIndividuelle} = \frac{\text{Participation} + \text{Réponses}}{2}
+\end{equation}
+
+\section{Note finale}
+
+\begin{equation}
+\text{NoteFinale} = 0.7 \times \text{NoteGroupe} + 0.3 \times \text{MoyenneIndividuelle}
+\end{equation}
+
+Cette formule permet de valoriser à la fois le travail de groupe et l'implication individuelle de chaque étudiant.
+
+% =========================================================
+% CHAPITRE 5
+% =========================================================
+\chapter{Présentation des interfaces}
+
+\section[Captures de l'espace Administration / Enseignant]{Captures de l'espace Administration /\\ Enseignant}
+
+Cette partie présente les principales interfaces de l'espace Administration / Enseignant.
+Elle met en évidence les différentes pages de consultation et de gestion, notamment les listes, les formulaires d'ajout, les formulaires de modification ainsi que certaines opérations de suppression.
+
+\subsection{Page de connexion}
+\safeimage{login.png}{0.85\textwidth}{Page de connexion}
+\FloatBarrier
+
+\subsection{Dashboard Administration / Enseignant}
+\safeimage{admin_dashboard.png}{0.85\textwidth}{Dashboard de l'espace Administration / Enseignant}
+\FloatBarrier
+
+\subsection{Page rappel mémoire}
+\safeimage{rappel_memoire.png}{0.85\textwidth}{Page de rappel mémoire avec affichage de la date limite de soumission}
+\FloatBarrier
+
+\subsection{Email de rappel de soumission du mémoire}
+\safeimage{rappel_email_memoire.png}{0.85\textwidth}{Email de rappel envoyé aux étudiants pour la soumission du mémoire}
+\FloatBarrier
+
+% =========================================================
+% UTILISATEURS
+% =========================================================
+
+\subsection{Liste des utilisateurs}
+\safeimage{liste_utilisateurs.png}{0.92\textwidth}{Liste des utilisateurs enregistrés dans le système}
+\FloatBarrier
+
+\subsection{Formulaire d'ajout d'un utilisateur}
+\safeimage{ajouter_utilisateur.png}{0.85\textwidth}{Formulaire d'ajout d'un nouvel utilisateur}
+\FloatBarrier
+
+\subsection{Modification d'un utilisateur}
+\safeimage{modifier_utilisateur.png}{0.85\textwidth}{Formulaire de modification d'un utilisateur}
+\FloatBarrier
+
+\subsection{Confirmation de suppression d'un utilisateur}
+\safeimage{supprimer_utilisateur_confirmation.png}{0.75\textwidth}{Boîte de dialogue de confirmation avant suppression d'un utilisateur}
+\FloatBarrier
+
+\subsection{Email contenant le lien de définition du mot de passe}
+\safeimage{set_password_email.png}{0.85\textwidth}{Email envoyé à l'utilisateur contenant le lien de définition du mot de passe}
+\FloatBarrier
+
+% =========================================================
+% FILIERES
+% =========================================================
+
+\subsection{Liste des filières}
+\safeimage{liste_filieres.png}{0.85\textwidth}{Liste des filières disponibles}
+\FloatBarrier
+
+\subsection{Formulaire d'ajout d'une filière}
+\safeimage{ajouter_filiere.png}{0.85\textwidth}{Formulaire d'ajout d'une filière}
+\FloatBarrier
+
+\subsection{Modification d'une filière}
+\safeimage{modifier_filiere.png}{0.85\textwidth}{Formulaire de modification d'une filière}
+\FloatBarrier
+
+\subsection{Confirmation de suppression d'une filière}
+\safeimage{supprimer_filiere_confirmation.png}{0.75\textwidth}{Boîte de dialogue de confirmation avant suppression d'une filière}
+\FloatBarrier
+
+% =========================================================
+% CLASSES
+% =========================================================
+
+\subsection{Liste des classes}
+\safeimage{liste_classes.png}{0.92\textwidth}{Liste des classes enregistrées}
+\FloatBarrier
+
+\subsection{Formulaire d'ajout d'une classe}
+\safeimage{ajouter_classe.png}{0.85\textwidth}{Formulaire d'ajout d'une classe}
+\FloatBarrier
+
+\subsection{Modification d'une classe}
+\safeimage{modifier_classe.png}{0.85\textwidth}{Formulaire de modification d'une classe}
+\FloatBarrier
+
+% =========================================================
+% ETUDIANTS
+% =========================================================
+
+\subsection{Liste des étudiants}
+\safeimage{liste_etudiants.png}{0.92\textwidth}{Liste des étudiants enregistrés}
+\FloatBarrier
+
+\subsection{Formulaire d'ajout d'un étudiant}
+\safeimage{ajouter_etudiant.png}{0.85\textwidth}{Formulaire d'ajout d'un étudiant}
+\FloatBarrier
+
+\subsection{Modification d'un étudiant}
+\safeimage{modifier_etudiant.png}{0.85\textwidth}{Formulaire de modification d'un étudiant}
+\FloatBarrier
+
+% =========================================================
+% ENSEIGNANTS
+% =========================================================
+
+\subsection{Liste des enseignants}
+\safeimage{liste_enseignants.png}{0.92\textwidth}{Liste des enseignants enregistrés}
+\FloatBarrier
+
+\subsection{Formulaire d'ajout d'un enseignant}
+\safeimage{ajouter_enseignant.png}{0.85\textwidth}{Formulaire d'ajout d'un enseignant}
+\FloatBarrier
+
+\subsection{Modification d'un enseignant}
+\safeimage{modifier_enseignant.png}{0.85\textwidth}{Formulaire de modification d'un enseignant}
+\FloatBarrier
+
+% =========================================================
+% JURYS
+% =========================================================
+
+\subsection{Liste des jurys}
+\safeimage{liste_jurys.png}{0.92\textwidth}{Liste des jurys enregistrés}
+\FloatBarrier
+
+\subsection{Formulaire d'ajout d'un jury}
+\safeimage{ajouter_jury.png}{0.85\textwidth}{Formulaire d'ajout d'un jury}
+\FloatBarrier
+
+\subsection{Modification d'un jury}
+\safeimage{modifier_jury.png}{0.85\textwidth}{Formulaire de modification d'un jury}
+\FloatBarrier
+
+% =========================================================
+% MEMOIRES
+% =========================================================
+
+\subsection{Liste des mémoires}
+\safeimage{liste_memoires.png}{0.92\textwidth}{Liste des mémoires soumis}
+\FloatBarrier
+
+\subsection{Page détail mémoire}
+\safeimage{detail_memoire.png}{0.92\textwidth}{Page de détail d'un mémoire avec ses informations principales}
+\FloatBarrier
+
+\subsection{Formulaire d'ajout d'un mémoire}
+\safeimage{ajouter_memoire.png}{0.85\textwidth}{Formulaire d'ajout d'un mémoire}
+\FloatBarrier
+
+\subsection{Modification d'un mémoire}
+\safeimage{modifier_memoire.png}{0.85\textwidth}{Formulaire de modification d'un mémoire}
+\FloatBarrier
+
+\begin{tcolorbox}[colback=lightgray,colframe=mainorange,title=NB]
+Dans le fonctionnement normal de l'application, le mémoire est soumis par les étudiants au niveau de l'espace étudiant, et chaque groupe dépose son propre mémoire avant la date limite fixée.
+
+Cependant, l'application prévoit également un cas particulier dans lequel l'administrateur peut ajouter un mémoire manuellement. Cette possibilité est utile, par exemple, en cas d'erreur de soumission, de problème technique ou de régularisation administrative.
+\end{tcolorbox}
+
+% =========================================================
+% SOUTENANCES
+% =========================================================
+
+\subsection{Liste des soutenances}
+\safeimage{liste_soutenances.png}{0.92\textwidth}{Liste des soutenances programmées}
+\FloatBarrier
+
+\subsection{Formulaire d'ajout d'une soutenance}
+\safeimage{ajouter_soutenance.png}{0.85\textwidth}{Formulaire de planification d'une soutenance}
+\FloatBarrier
+
+\subsection{Modification d'une soutenance}
+\safeimage{modifier_soutenance.png}{0.85\textwidth}{Formulaire de modification d'une soutenance}
+\FloatBarrier
+
+% =========================================================
+% EVALUATIONS
+% =========================================================
+
+\subsection{Page d'évaluation}
+\safeimage{evaluations.png}{0.92\textwidth}{Page d'évaluation des soutenances}
+\FloatBarrier
+
+\subsection{Page détail évaluation}
+\safeimage{detail_evaluation.png}{0.92\textwidth}{Page de détail d'une évaluation}
+\FloatBarrier
+
+\subsection{Formulaire de saisie des notes}
+\safeimage{saisie_notes.png}{0.92\textwidth}{Formulaire de saisie des notes de groupe et des notes individuelles}
+\FloatBarrier
+
+\subsection{Notification du résultat de soutenance}
+\safeimage{notification_resultat.png}{0.85\textwidth}{Notification envoyée après publication des résultats}
+\FloatBarrier
+
+% =========================================================
+% ESPACE ETUDIANT
+% =========================================================
+\section{Captures de l'espace Étudiant}
+
+Dans l'espace étudiant, l'utilisateur suit un parcours fluide, sécurisé et structuré, conçu pour simplifier son interaction avec le système.
+
+Après la création de son compte par l'administration, l'étudiant reçoit automatiquement un email contenant un lien sécurisé lui permettant de définir son mot de passe. Cette étape garantit la sécurité de l'authentification et évite la transmission directe des mots de passe.
+
+Une fois le mot de passe configuré, l'étudiant peut accéder à la page de connexion et s'authentifier afin d'accéder à son tableau de bord personnel.
+
+Le tableau de bord centralise les informations essentielles, notamment la classe, la filière, la dernière note obtenue, ainsi que les données liées au mémoire et à la soutenance.
+
+L'étudiant peut ensuite soumettre le mémoire de son groupe avant la date limite définie par l'administration. Le système contrôle automatiquement cette contrainte : si la date limite est dépassée, la soumission est bloquée afin de garantir le respect des règles académiques.
+
+Par ailleurs, pour améliorer la communication, le système intègre un mécanisme de notifications automatiques. L'étudiant reçoit :
+\begin{itemize}
+    \item un email de rappel avant la date limite de soumission du mémoire ;
+    \item un email de confirmation après la soumission du mémoire ;
+    \item une notification lors de la planification de la soutenance ;
+    \item une notification lors de la publication des résultats.
+\end{itemize}
+
+Ainsi, cet espace offre une expérience complète permettant à l'étudiant de suivre efficacement toutes les étapes de son parcours académique liées à la soutenance.
+
+\subsection{Email de notification pour définir le mot de passe}
+\studentimage{email_set_password.png}{Email envoyé à l'étudiant contenant le lien de définition du mot de passe}
+\FloatBarrier
+
+\subsection{Page définir le mot de passe}
+\studentimage{set_password_page.png}{Page permettant à l'étudiant de définir son mot de passe}
+\FloatBarrier
+
+\subsection{Page de connexion}
+\studentimage{login.png}{Page de connexion de l'application}
+\FloatBarrier
+
+\subsection{Dashboard étudiant}
+\studentimage{student_dashboard.png}{Dashboard de l'espace étudiant}
+\FloatBarrier
+
+\subsection{Email de rappel de soumission du mémoire}
+\studentimage{rappel_email_memoire.png}{Email de rappel envoyé aux étudiants concernant la date limite de soumission du mémoire}
+\FloatBarrier
+
+Afin de réduire les oublis et améliorer le respect des délais, le système permet à l'administrateur d'envoyer un rappel collectif à tous les étudiants.
+
+Cet email informe les étudiants de la date limite de soumission du mémoire et les incite à finaliser leur dépôt avant expiration du délai.
+
+Cette fonctionnalité représente une valeur ajoutée importante, car elle améliore la communication entre l'administration et les étudiants et réduit les retards dans la gestion des mémoires.
+
+\subsection{Page soumettre mémoire}
+\studentimage{soumettre_memoire.png}{Page de soumission du mémoire}
+\FloatBarrier
+
+\subsection{Page soumettre mémoire (suite)}
+\studentimage{soumettre_memoire1.png}{Page de soumission du mémoire (suite)}
+\FloatBarrier
+
+\subsection{Mémoire après soumission}
+\studentimage{memoire_apres_soumission.png}{Affichage du mémoire après soumission}
+\FloatBarrier
+
+\subsection{Email de confirmation après soumission}
+\studentimage{confirmation_soumission_email.png}{Email de confirmation après soumission du mémoire}
+\FloatBarrier
+
+\subsection{Email de confirmation après soumission (suite)}
+\studentimage{confirmation_soumission_email_1.png}{Email de confirmation après soumission du mémoire (suite)}
+\FloatBarrier
+
+\subsection{Notification de planification de soutenance}
+\studentimage{notification_planification.png}{Notification de planification de la soutenance}
+\FloatBarrier
+
+\subsection{Notification de planification de soutenance (suite)}
+\studentimage{notification_planification_1.png}{Notification de planification de la soutenance (suite)}
+\FloatBarrier
+
+\subsection{Page Ma soutenance}
+\studentimage{ma_soutenance.png}{Page Ma soutenance}
+\FloatBarrier
+
+\subsection{Page Mes évaluations}
+\studentimage{mes_evaluations.png}{Page Mes évaluations}
+\FloatBarrier
+
+\subsection{Notification de résultat de soutenance}
+\studentimage{notification_resultat.png}{Notification de disponibilité du résultat de soutenance}
+\FloatBarrier
+
+\section{Résultats obtenus}
+
+L'application permet :
+\begin{itemize}
+    \item une meilleure organisation des soutenances ;
+    \item la centralisation des données ;
+    \item l'automatisation de certaines tâches ;
+    \item une amélioration de la communication avec les étudiants ;
+    \item une réduction des erreurs liées à la gestion manuelle ;
+    \item un accès rapide et clair aux informations importantes.
+\end{itemize}
+
+% =========================================================
+% CONCLUSION
+% =========================================================
+\chapter*{Conclusion Générale}
+\addcontentsline{toc}{chapter}{Conclusion Générale}
+
+Ce projet nous a permis de concevoir et réaliser une application web de gestion des soutenances répondant à un besoin réel au sein de l'ISME. L'application proposée centralise la gestion académique et améliore l'organisation des mémoires, des soutenances, des jurys et des évaluations.
+
+Notre travail ne s'est pas limité à la création de simples pages de gestion. Nous avons également intégré une logique métier utile, notamment l'envoi d'un lien de définition du mot de passe, le rappel par email de la date limite de dépôt, la soumission de mémoire par groupe, le blocage automatique après dépassement du délai, l'email de confirmation après dépôt et la notification liée à la planification et aux résultats des soutenances.
+
+Ainsi, cette solution améliore le fonctionnement administratif, réduit les erreurs humaines et facilite l'expérience utilisateur pour l'administration, les enseignants et les étudiants.
+
+% =========================================================
+% PERSPECTIVES
+% =========================================================
+\chapter*{Perspectives}
+\addcontentsline{toc}{chapter}{Perspectives}
+
+Comme perspectives, nous proposons :
+\begin{itemize}
+    \item l'ajout d'un système de notifications plus avancé ;
+    \item l'intégration d'un calendrier interactif ;
+    \item l'export des résultats en PDF ;
+    \item l'ajout de statistiques et tableaux de bord plus détaillés ;
+    \item une version mobile de l'application ;
+    \item une amélioration continue de l'expérience utilisateur.
+\end{itemize}
+
+% =========================================================
+% REFERENCES
+% =========================================================
+\chapter*{Références bibliographiques}
+\addcontentsline{toc}{chapter}{Références bibliographiques}
+
+\begin{itemize}
+    \item Documentation officielle Flask
+    \item Documentation officielle MySQL
+    \item Documentation officielle Jinja2
+    \item Documentation officielle HTML, CSS et JavaScript
+    \item Documentation officielle Git et GitHub
+    \item Supports pédagogiques sur Merise
+\end{itemize}
+
+% =========================================================
+% ANNEXES
+% =========================================================
+\appendix
+\chapter{Annexes}
+
+\section{Organisation recommandée des images dans Overleaf}
+
+Place les captures dans le projet Overleaf avec des noms simples, sans espace ni accents, par exemple :
+
+\begin{itemize}
+    \item login.png
+    \item admin\_dashboard.png
+    \item rappel\_memoire.png
+    \item gestion\_utilisateurs.png
+    \item set\_password\_email.png
+    \item filieres.png
+    \item classes.png
+    \item etudiants.png
+    \item enseignants.png
+    \item jurys.png
+    \item soutenances.png
+    \item evaluations.png
+    \item student\_dashboard.png
+    \item soumettre\_memoire.png
+    \item memoire\_apres\_soumission.png
+    \item confirmation\_soumission\_email.png
+    \item notification\_planification.png
+    \item ma\_soutenance.png
+    \item mes\_evaluations.png
+    \item notification\_resultat.png
+\end{itemize}
+
+\section{Remarque importante}
+
+Si une image n'existe pas encore dans Overleaf, la macro \texttt{\textbackslash safeimage} (utilisée dans ce rapport) affiche automatiquement un encadré de remplacement indiquant le nom du fichier manquant. Aucune ligne ne doit être commentée.
+
+\end{document}
